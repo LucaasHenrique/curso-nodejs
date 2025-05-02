@@ -1,7 +1,7 @@
 import Customer from "../models/Customer.js";
 import { Op } from "sequelize";
 import { parseISO } from "date-fns";
-import Contacts from "../models/Contacts.js";
+import Contact from "../models/Contact.js";
 import * as Yup from "yup";
 
 class CustomersController {
@@ -96,7 +96,7 @@ class CustomersController {
 		const data = await Customer.findAll({
 			where,
 			include: [{
-				model: Contacts,
+				model: Contact,
 				attributes: ["id"],
 			}],
 			order,
