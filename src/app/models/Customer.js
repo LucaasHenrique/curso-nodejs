@@ -5,7 +5,10 @@ class Customer extends Model {
         super.init({
             name: Sequelize.STRING,
             email: Sequelize.STRING,
-            status: Sequelize.ENUM("ACTIVE", "ARCHIVED")
+            status: {
+                type: Sequelize.ENUM("ACTIVE", "ARCHIVED"),
+                defaultValue: "ACTIVE"
+                }
             }, {
                 scopes: {
                     active: {
@@ -29,11 +32,11 @@ class Customer extends Model {
                     }
                 }, 
 
-                hooks: {
+                /*hooks: {
                     beforeValidate: (customer) => {
                         customer.status = "ARCHIVED";
                     }
-                },
+                },*/
                 sequelize,
             	name: {
 					singular: "customer",
@@ -45,7 +48,7 @@ class Customer extends Model {
     }
 
     static associate(models) {
-        this.hasMany(models.Contacts);
+        this.hasMany(models.Contact);
     }
 };
 
