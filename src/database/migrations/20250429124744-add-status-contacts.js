@@ -1,6 +1,6 @@
 module.exports = {
   async up (queryInterface, Sequelize) { 
-    await queryInterface.createTable('contacts', "status", { 
+    await queryInterface.addColumn('contacts', "status", { 
       type: Sequelize.ENUM("ACTIVE", "ARCHIVED"),
       allowNull: false,
       defaultValue: "ACTIVE",
