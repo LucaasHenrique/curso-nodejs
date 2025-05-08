@@ -3,6 +3,8 @@ import { parseISO } from "date-fns";
 import * as Yup from "yup";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import Queue from "../../lib/Queue.js";
+import WelcomeEmailJob from "../jobs/WelcomeEmailJob.js";
 
 class UserController {
     async index(req, res) {
@@ -96,7 +98,9 @@ class UserController {
 	}
 
     async show(req, res) {
-        const user = await User.findByPk(req.params.id);
+        const user = await User.findByPk(req.params.id, {
+            attributes: {exclude: ["password", "password_hash"]},
+        });
          
         if (!user) {
             return res.status(404).json();
@@ -119,10 +123,11 @@ class UserController {
         if (!(await schema.isValid(req.body))) {
             return res.status(400).json({error: "Error on validate schema!"});
         }
-
-		const {id, name, email, createdAt, updatedAt} = await User.create(req.body);
  
-        return res.status(201).json({id, name, email, createdAt, updatedAt});
+		const {id, name, email, file_id, createdAt, updatedAt} = await User.create(req.body);
+        Queue.add(WelcomeEmailJob.key, {name, email}) 
+
+        return res.status(201).json({id, name, email, file_id, createdAt, updatedAt});
     }
 
     async update(req, res) { 
@@ -154,9 +159,9 @@ class UserController {
             return res.status(401).json({error: "Password does not match!"});
         }
 
-		const {id, name, email, createdAt, updatedAt} = await user.update(req.body);
+		const {id, name, email, file_id, createdAt, updatedAt} = await user.update(req.body);
  
-        return res.status(201).json({id, name, email, createdAt, updatedAt}); 
+        return res.status(201).json({id, name, email, file_id, createdAt, updatedAt}); 
     }
 
     async destroy(req, res) {
