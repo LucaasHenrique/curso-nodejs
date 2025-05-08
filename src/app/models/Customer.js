@@ -19,7 +19,7 @@ class Customer extends Model {
                     name: {
                         where: {
                             name: "lucas"
-                        } 
+                        }
                     },
                     created(date) {
                         return {
@@ -30,7 +30,7 @@ class Customer extends Model {
                             }
                         }
                     }
-                }, 
+                },
 
                 /*hooks: {
                     beforeValidate: (customer) => {
@@ -41,7 +41,7 @@ class Customer extends Model {
             	name: {
 					singular: "customer",
 					plural: "customers",
-				}
+				},
             }
         );
         return this;
