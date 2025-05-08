@@ -13,6 +13,7 @@ export default async (req, res, next) => {
     try {
         const decode = jwt.verify(token, process.env.HASH_KEY, {
             algorithms: ["HS256"],
+            expiresIn: process.env.TOKEN_EXPIRATION,
         });
         
         req.userId = decode.id;
